@@ -1,27 +1,24 @@
 pipeline {
     agent any
-    parameters {
-         booleanParam(name: 'RUN_EXTRA_CHECK', defaultValue: true, description: 'Run the extra check stage')
+    environment {
+        APP_NAME = 'GradeBookApp'
+        APP_VERSION = '1.0.0'
     }
     stages {
         stage('Checkout') {
             steps {
-            git branch: 'main', url: 'https://github.com/harshmishra170206/LAB5.git'
+                git branch: 'main', url: 'https://github.com/harshmishra170206/LAB5.git'
+            }
+        }
+        stage('Show App Info') {
+            steps {
+                echo "Building ${env.APP_NAME}, version ${env.APP_VERSION}"
             }
         }
         stage('Build') {
             steps {
-            bat 'python -m py_compile app.py'
-            echo 'Build successful: app.py compiled with no syntax errors'
-            }
-        }
-        stage('Extra Check') {
-            when {
-                expression { params.RUN_EXTRA_CHECK == true }
-            }
-            steps {
-            echo 'Running extra check: verifying greet() output format...'
-            bat 'python -c "from app import greet; print(greet(\'Student\'))"'
+                bat 'python -m py_compile app.py'
+                echo "${env.APP_NAME} version ${env.APP_VERSION} compiled successfully."
             }
         }
     }
