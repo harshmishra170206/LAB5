@@ -3,17 +3,26 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-            git branch: 'main', url: 'https://github.com/harshmishra170206/LAB5.git'
+            git branch: 'main', url: 'https://github.com/<student-username>/<repo-name>.git'
             }
         }
-        stage('Generate Report') {
-            steps {
-            bat 'python app.py'
+        stage('Parallel Checks') {
+            parallel {
+                stage('Frontend Check') {
+                    steps {
+                    bat 'python frontend_check.py'
+                    }
+                }
+                stage('Backend Check') {
+                    steps {
+                    bat 'python backend_check.py'
+                    }
+                }
             }
         }
-        stage('Archive Report') {
+        stage('Summary') {
             steps {
-            archiveArtifacts artifacts: 'report.txt', fingerprint: true
+            echo 'Both frontend and backend checks are complete.'
             }
         }
     }
