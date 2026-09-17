@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                bat 'python -m py_compile app.py'
+                sh 'python3 -m py_compile app.py'
                 echo "${env.APP_NAME} version ${env.APP_VERSION} compiled successfully."
             }
         }
